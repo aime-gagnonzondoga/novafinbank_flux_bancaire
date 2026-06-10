@@ -1,0 +1,29 @@
+# ============================================
+# NOVAFINBANK — REQUIREMENTS
+# ============================================
+# Projet : Gestion numérique des flux bancaires
+# Stack  : Django REST Framework + PostgreSQL
+# ============================================
+
+# --- Backend Django ---Phase1
+django==6.0.6
+djangorestframework==3.17.1
+psycopg2-binary==2.9.12
+djangorestframework-simplejwt==5.5.1
+
+# --- Utilitaires ---
+python-dotenv==1.2.2
+django-cors-headers==4.9.0
+
+# --- Filtrage & Recherche ---
+django-filter==25.2          # Filtrer les transactions par date, montant, type...
+
+# --- Gestion des images ---
+pillow==12.2.0                 # Photos de profil clients
+
+# --- Analyse de données ---Phase 2
+pandas==3.0.3                 # Statistiques sur les flux bancaires
+numpy==2.4.6                  # Calculs numériques
+
+# --- Rapports PDF --- Phase 3
+reportlab==4.5.1              # Génération de relevés bancaires PDF
