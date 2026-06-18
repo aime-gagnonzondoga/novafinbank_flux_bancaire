@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 # permissions permet de contrôler l'accès aux vues
-from rest_framework.permissions import IsAuthenticated, AllowAny, BasePermission
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from utilisateurs.permissions import EstAdministrateur
 
 # On importe les modèles
 from .models import Utilisateur, Client, Agent
