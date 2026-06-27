@@ -464,6 +464,75 @@ class LoginAgentView(APIView):
 
 
 # ============================================
+# VUE LOGIN Admin
+# ============================================
+
+
+class LoginAdminView(APIView):
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        """Connecter un administrateur avec email + mot_de_passe"""
+
+        email        = request.data.get('email')
+        mot_de_passe = request.data.get('mot_de_passe')
+        adresse_ip   = get_adresse_ip(request)
+
+        if not email or not mot_de_passe:
+            return Response(
+                {'error': 'Email et mot de passe requis.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        utilisateur = authenticate(
+            request,
+            username=email,
+            password=mot_de_passe
+        )
+
+        if utilisateur is None:
+            LogSecurite.objects.create(
+                action      = 'TENTATIVE_ECHEC',
+                adresse_ip  = adresse_ip,
+                details     = f"Tentative admin échouée : {email}",
+                utilisateur = None,
+            )
+            return Response(
+                {'error': 'Email ou mot de passe incorrect.'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        if utilisateur.role != 'ADMINISTRATEUR':
+            return Response(
+                {'error': 'Ce compte n\'est pas un compte administrateur.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        if not utilisateur.is_active:
+            return Response(
+                {'error': 'Ce compte est désactivé.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        refresh = RefreshToken.for_user(utilisateur)
+
+        LogSecurite.objects.create(
+            action      = 'CONNEXION',
+            adresse_ip  = adresse_ip,
+            details     = f"Connexion admin réussie : {email}",
+            utilisateur = utilisateur,
+        )
+
+        return Response(
+            {
+                'access'  : str(refresh.access_token),
+                'refresh' : str(refresh),
+                'role'    : utilisateur.role,
+            },
+            status=status.HTTP_200_OK
+        )
+# ============================================
 # VUE DÉCONNEXION
 # ============================================
 

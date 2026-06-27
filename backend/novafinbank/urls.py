@@ -26,7 +26,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenRefreshView
-from utilisateurs.views import LoginClientView, LoginAgentView, LogoutView
+from utilisateurs.views import LoginClientView, LoginAgentView, LoginAdminView, LogoutView
 
 urlpatterns = [
 
@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/auth/login/agent/',  LoginAgentView.as_view(),   name='login-agent'),
     path('api/auth/refresh/',      TokenRefreshView.as_view(), name='token-refresh'),
     path('api/auth/logout/',       LogoutView.as_view(),       name='logout'),
+    path('api/auth/login/admin/', LoginAdminView.as_view(), name='login-admin'),
 
     # Apps NovaFinBank
     path('api/',              include('utilisateurs.urls')),
